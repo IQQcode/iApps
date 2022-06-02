@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ASMIdeaPluginConfiguration">
+    <asm skipDebug="true" skipFrames="true" skipCode="false" expandFrames="false" />
+    <groovy codeStyle="LEGACY" />
+  </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/drawable/progressbar_refresh.xml" value="0.2045" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/activity_article_detail.xml" value="0.259375" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/activity_logo.xml" value="0.4" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/activity_main.xml" value="0.536" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/activity_main2.xml" value="0.38645833333333335" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/activity_maintab.xml" value="0.27395833333333336" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/item_card_view.xml" value="0.536" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/layout_refresh_footer.xml" value="0.38645833333333335" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/refresh.xml" value="0.38645833333333335" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/refresh_view.xml" value="0.3854166666666667" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/layout/view_loading.xml" value="0.38645833333333335" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/menu/aaa.xml" value="0.38645833333333335" />
+        <entry key="..\:/WaddleConvince/iNews/app/src/main/res/menu/menu_main.xml" value="0.38645833333333335" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
