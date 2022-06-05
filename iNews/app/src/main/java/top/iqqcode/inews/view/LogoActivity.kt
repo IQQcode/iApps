@@ -1,10 +1,10 @@
-package top.iqqcode.inews
+package top.iqqcode.inews.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import top.iqqcode.inews.MainActivity
 import top.iqqcode.inews.databinding.ActivityLogoBinding
-import top.iqqcode.inews.databinding.ActivityMainBinding
 
 class LogoActivity : AppCompatActivity() {
 

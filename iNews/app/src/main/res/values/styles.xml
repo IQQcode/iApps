@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyAppBarLayoutTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
+</resources>

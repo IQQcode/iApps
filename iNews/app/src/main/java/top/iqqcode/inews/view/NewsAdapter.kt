@@ -92,11 +92,6 @@ class NewsAdapter(private val mContext: Context) :
     @SuppressLint("CheckResult", "SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_NORMAL && holder is CommonViewHolder) {
-            // 通过为条目设置点击事件触发回调
-            holder.itemView.setOnClickListener {
-                mOnItemClickListener!!.onItemClick(it, holder.adapterPosition)
-            }
-
             val model: Article? = mNewsData?.get(position)
             Log.i("IQQCODE", "position: > \n" + model.toString())
             val requestOptions = RequestOptions()
@@ -132,6 +127,11 @@ class NewsAdapter(private val mContext: Context) :
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.mCoverPage)
+
+            // 通过为条目设置点击事件触发回调
+            holder.itemView.setOnClickListener {
+                mOnItemClickListener!!.onItemClick(it, holder.getAdapterPosition(), model)
+            }
 
             holder.mTitle.text = model?.title
             if (model?.digest != null) {
@@ -187,7 +187,7 @@ class NewsAdapter(private val mContext: Context) :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick(view: View, position: Int, articleData: Article?)
     }
 
     inner class CommonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

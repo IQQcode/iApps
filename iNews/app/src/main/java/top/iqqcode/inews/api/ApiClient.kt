@@ -20,6 +20,7 @@ object ApiClient {
     private const val BASE_URL = "https://www.mxnzp.com/api/news/"
 
     private const val LIST_TYPE = "list"
+    private const val NEWS_DETAILS = "details"
 
     /**
      * 话题类型
@@ -41,6 +42,10 @@ object ApiClient {
 
     private fun getSecret(): String {
         return "&app_id=" + NewsApplication.API_KEY + "&app_secret=" + NewsApplication.API_SECRET
+    }
+
+    fun getNewsDetails(newsId: String?): String {
+        return BASE_URL + NEWS_DETAILS + "?newsId=" + newsId + getSecret()
     }
 
     /**

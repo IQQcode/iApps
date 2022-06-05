@@ -5,6 +5,7 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -21,16 +22,17 @@ import top.iqqcode.inews.data.Article
 import top.iqqcode.inews.data.NewsData
 import top.iqqcode.inews.databinding.ActivityMainBinding
 import top.iqqcode.inews.util.isNetworkAvailable
-import top.iqqcode.inews.view.FootViewHolder
+import top.iqqcode.inews.view.ArticleDetailActivity
 import top.iqqcode.inews.view.FootViewHolder.Companion.FAILED
-import top.iqqcode.inews.view.FootViewHolder.Companion.FINISHED
 import top.iqqcode.inews.view.FootViewHolder.Companion.HAS_MORE
 import top.iqqcode.inews.view.NewsAdapter
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
-
+/**
+ * Main activity
+ * @constructor Create empty Main activity
+ */
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         mRecyclerView.adapter = mAdapter
 
         // 功能1:创建页面后立即从网络获取新的数据，并刷新到UI上
-        loadNewData()
+        loadNewData(refresh)
 
         // 功能2：下拉刷新
         onPullRefresh()
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         onClick()
     }
 
-    private fun loadNewData() {
+    private fun loadNewData(loadType: Int) {
         if (isLoading) return
         isLoading = true
         if (isNetworkAvailable(NewsApplication.context)) {
@@ -78,7 +80,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 val list = getDataFromNetwork()
                 if (list != null && list.isNotEmpty()) {
                     runOnUiThread {
-                        replaceDataInRecyclerView(list)
+                        replaceDataInRecyclerView(list, loadType)
 //                        thread {
 //                            insertNewsToDataBase()
 //                        }
@@ -111,7 +113,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             thread {
                 Thread.sleep(700) // 这个延迟0.7秒只是为了实现视觉效果，与逻辑无关
                 runOnUiThread {
-                    loadNewData()
+                    loadNewData(refresh)
                     mRefreshLayout.isRefreshing = false // 让圆形进度条停下来
                 }
             }
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                             // 判断是否滑动到了最后一个item，并且是向上滑动
                             if (lastItemPosition == itemCount - 1 && isSlidingUpward) {
                                 // 向下滑动到底部时，立即加载数据
-                                loadNewData()
+                                loadNewData(load)
                             }
                         }
                         RecyclerView.SCROLL_STATE_DRAGGING -> {
@@ -162,7 +164,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val topRowVerticalPosition =
-                    if (recyclerView == null || recyclerView.childCount === 0)
+                    if (recyclerView.childCount == 0)
                         0 else recyclerView.getChildAt(0).top
                 mRefreshLayout.isEnabled = topRowVerticalPosition >= 0
                 // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
@@ -175,16 +177,27 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         })
     }
 
+    /**
+     * 新闻列表Item点击事件
+     *  https://www.mxnzp.com/api/news/details?newsId=EJA5MJQ30001875N&app_id=onxudwg6nriqlluz&app_secret=bjhSOVpJbTE5ZmUvSDYvak93cGt3QT09
+     */
     private fun onClick() {
-        // 真正处理item点击事件
+        // 处理item点击事件
         mAdapter.setOnItemClickListener(object : NewsAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
+            override fun onItemClick(view: View, position: Int, articleData: Article?) {
+                val newsId = articleData?.newsId
+                val newsDetailUrl = ApiClient.getNewsDetails(newsId)
                 val intent = Intent(this@MainActivity, ArticleDetailActivity::class.java)
+                intent.putExtra("details_url", newsDetailUrl)
                 startActivity(intent)
             }
         })
     }
 
+    /**
+     * 初始话UI
+     *
+     */
     private fun initView() {
 
         mRecyclerView = binding.mRecyclerView
@@ -192,6 +205,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         mRefreshLayout.setOnRefreshListener(this)
     }
 
+    /**
+     * 请求网络数据
+     *
+     * @return
+     */
     private fun getDataFromNetwork(): List<Article>? {
         pageData++
         var dataList: List<Article>? = null
@@ -236,6 +254,12 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
 
+    /**
+     * 菜单栏操作
+     *
+     * @param menu
+     * @return
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
@@ -249,13 +273,13 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query?.length!! > 2) {
                     // TODO：输入关键字query查询新闻
-                    loadNewData()
+                    loadNewData(refresh)
                 }
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                loadNewData()
+                loadNewData(refresh)
                 return false
             }
         })
@@ -271,11 +295,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
      * 刷新UI操作:用 newData 替换掉 RecyclerView中所有的旧数据
      */
     @SuppressLint("NotifyDataSetChanged")
-    private fun replaceDataInRecyclerView(newData: List<Article>) {
+    private fun replaceDataInRecyclerView(newData: List<Article>, loadType: Int) {
         try {
-//            if (loadType == refresh) {
-//                mNewsList.clear()
-//            }
+            if (loadType == refresh) {
+                mNewsList.clear()
+            }
             mNewsList.addAll(newData)
             mAdapter.setData(mNewsList)
             mAdapter.notifyDataSetChanged()
