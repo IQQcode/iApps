@@ -1,5 +1,6 @@
 package top.iqqcode.inews.api
 
+import android.annotation.SuppressLint
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -51,12 +52,14 @@ object ApiClient {
     fun getUnsafeOkHttpClient(): OkHttpClient.Builder {
         try {
             val trustAllCerts: Array<TrustManager> = arrayOf(object : X509TrustManager {
+                @SuppressLint("TrustAllX509TrustManager")
                 @Throws(CertificateException::class)
                 override fun checkClientTrusted(
                     chain: Array<java.security.cert.X509Certificate>, authType: String,
                 ) {
                 }
 
+                @SuppressLint("TrustAllX509TrustManager")
                 @Throws(CertificateException::class)
                 override fun checkServerTrusted(
                     chain: Array<java.security.cert.X509Certificate>,

@@ -2,6 +2,8 @@ package top.iqqcode.inews.data
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
+import org.litepal.annotation.Column
+import org.litepal.crud.LitePalSupport
 
 /**
  * @Author: iqqcode
@@ -9,6 +11,10 @@ import com.google.gson.annotations.Expose
  * @Description:
  */
 data class Article(
+
+    // id 默认自增
+    var id: Long,
+    @Column(unique = true, index = true)
 
     // title-新闻标题
     var title: String,
@@ -28,4 +34,5 @@ data class Article(
 
     // postTime-新闻发布时间
     var postTime: String,
-)
+) : LitePalSupport()
+// 为 News添加 LitePal 支持，使之作为一张表存入数据库中

@@ -12,11 +12,11 @@ import top.iqqcode.inews.R
  * @Date: 2022-05-21 16:20
  * @Description:
  */
-class FootViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+open class FootViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    protected var mLoadingView: LinearLayout
-    protected var mNoMoreView: LinearLayout
-    protected var mErrorView: TextView
+    private var mLoadingView: LinearLayout
+    private var mNoMoreView: LinearLayout
+    private var mErrorView: TextView
 
     fun updateLoadMore(view: View, state: Int) {
         when (state) {
