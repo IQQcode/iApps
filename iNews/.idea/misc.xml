@@ -4,6 +4,10 @@
     <asm skipDebug="true" skipFrames="true" skipCode="false" expandFrames="false" />
     <groovy codeStyle="LEGACY" />
   </component>
+  <component name="ASMSmaliIdeaPluginConfiguration">
+    <asm skipDebug="true" skipFrames="true" skipCode="false" expandFrames="false" />
+    <groovy codeStyle="LEGACY" />
+  </component>
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
@@ -30,6 +34,7 @@
         <entry key="app/src/main/res/layout/activity_article_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_card_view.xml" value="0.2930253623188406" />
         <entry key="app/src/main/res/layout/news_item_header_view.xml" value="0.31476449275362317" />
+        <entry key="app/src/main/res/layout/news_show_container_view.xml" value="0.1884498480243161" />
       </map>
     </option>
   </component>
